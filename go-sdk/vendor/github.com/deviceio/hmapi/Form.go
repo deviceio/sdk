@@ -15,7 +15,11 @@ type FormRequest interface {
 	AddFieldAsBool(name string, value bool) FormRequest
 	AddFieldAsOctetStream(name string, value io.Reader) FormRequest
 	AddFieldAsInt(name string, value int) FormRequest
-	Submit(ctx context.Context) (*http.Response, error)
+	Submit(ctx context.Context) (*FormResponse, error)
+}
+
+type FormResponse struct {
+	*http.Response
 }
 
 type FormSubmission interface {
@@ -84,7 +88,7 @@ func (t *formRequest) AddFieldAsInt(name string, value int) FormRequest {
 	return t
 }
 
-func (t *formRequest) Submit(ctx context.Context) (retresp *http.Response, reterr error) {
+func (t *formRequest) Submit(ctx context.Context) (retresp *FormResponse, reterr error) {
 	hmres, err := t.resource.Get(ctx)
 
 	if err != nil {
@@ -151,7 +155,7 @@ waitforcomplete:
 			reterr = resperr
 
 		case resp := <-chresp:
-			retresp = resp
+			retresp = &FormResponse{resp}
 			break waitforcomplete
 
 		case <-ctx.Done():

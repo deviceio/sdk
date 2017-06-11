@@ -29,7 +29,7 @@ type deviceProcess struct {
 func (t *deviceProcess) Create(ctx context.Context, cmd string, args []string) (DeviceProcessInstance, error) {
 	form := t.device.client.hmclient.
 		Resource(t.resourcePath).
-		Form("create-process").
+		Form("create").
 		AddFieldAsString("cmd", cmd)
 
 	for _, arg := range args {

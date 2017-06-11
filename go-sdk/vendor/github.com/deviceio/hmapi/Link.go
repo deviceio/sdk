@@ -2,10 +2,7 @@ package hmapi
 
 import (
 	"context"
-	"errors"
-	"io"
 	"net/http"
-	"strings"
 )
 
 type Link struct {
@@ -15,12 +12,11 @@ type Link struct {
 }
 
 type LinkRequest interface {
-	Get(context.Context) (LinkResponse, error)
+	Get(context.Context) (*LinkResponse, error)
 }
 
-type LinkResponse interface {
-	HttpResponse() *http.Response
-	AsOctetStream() (io.Reader, error)
+type LinkResponse struct {
+	*http.Response
 }
 
 type linkRequest struct {
@@ -28,7 +24,7 @@ type linkRequest struct {
 	resource *resourceRequest
 }
 
-func (t *linkRequest) Get(ctx context.Context) (LinkResponse, error) {
+func (t *linkRequest) Get(ctx context.Context) (*LinkResponse, error) {
 	res, err := t.resource.Get(ctx)
 
 	if err != nil {
@@ -60,25 +56,7 @@ func (t *linkRequest) Get(ctx context.Context) (LinkResponse, error) {
 		return nil, err
 	}
 
-	return &linkResponse{
-		httpResponse: resp,
+	return &LinkResponse{
+		resp,
 	}, nil
-}
-
-type linkResponse struct {
-	httpResponse *http.Response
-}
-
-func (t *linkResponse) HttpResponse() *http.Response {
-	return t.httpResponse
-}
-
-func (t *linkResponse) AsOctetStream() (io.Reader, error) {
-	ct := t.httpResponse.Header.Get("Content-Type")
-
-	if !strings.Contains(strings.ToLower(ct), strings.ToLower(MediaTypeOctetStream.String())) {
-		return nil, errors.New("response has invalid content type to become octet stream")
-	}
-
-	return t.httpResponse.Body, nil
 }

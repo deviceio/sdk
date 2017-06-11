@@ -23,13 +23,13 @@
   branch = "master"
   name = "github.com/deviceio/agent"
   packages = ["resources/filesystem","transport"]
-  revision = "e7fb685cc854b0cd9fd44b53fea9dd4856b6e7c4"
+  revision = "29641e8088593cdc9e6d673bd73e5c026f61ff23"
 
 [[projects]]
   branch = "master"
   name = "github.com/deviceio/hmapi"
   packages = ["."]
-  revision = "d0af30ec21ae629bd10408d051851835822b628f"
+  revision = "cfb7a1b081c272a8679b8c174380ca1ee8c267fa"
 
 [[projects]]
   branch = "master"
@@ -89,7 +89,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "b9e8d468b01f806830d387bd9a1fe96dc68129d1"
+  revision = "0b25a408a50076fbbcae6b7ac0ea5fbb0b085e79"
 
 [solve-meta]
   analyzer-name = "dep"
