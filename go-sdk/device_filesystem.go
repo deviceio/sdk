@@ -5,7 +5,8 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
-	"net/http"
+
+	"github.com/deviceio/hmapi"
 )
 
 type DeviceFilesystem interface {
@@ -14,7 +15,7 @@ type DeviceFilesystem interface {
 }
 
 type deviceFilesystemReader struct {
-	resp        *http.Response
+	resp        *hmapi.FormResponse
 	resperr     error
 	resperrbody string
 }

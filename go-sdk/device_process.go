@@ -6,6 +6,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/deviceio/hmapi"
 )
 
 type DeviceProcess interface {
@@ -158,12 +160,12 @@ func (t *deviceProcessInstance) Stdout(ctx context.Context) io.Reader {
 
 	reader := &deviceProcessOutputReader{
 		ctx:     ctx,
-		resp:    resp.HttpResponse(),
+		resp:    resp,
 		resperr: err,
 	}
 
-	if resp.HttpResponse() != nil && resp.HttpResponse().StatusCode >= 300 {
-		data, _ := ioutil.ReadAll(resp.HttpResponse().Body)
+	if resp != nil && resp.StatusCode >= 300 {
+		data, _ := ioutil.ReadAll(resp.Body)
 		reader.resperrbody = string(data)
 	}
 
@@ -178,12 +180,12 @@ func (t *deviceProcessInstance) Stderr(ctx context.Context) io.Reader {
 
 	reader := &deviceProcessOutputReader{
 		ctx:     ctx,
-		resp:    resp.HttpResponse(),
+		resp:    resp,
 		resperr: err,
 	}
 
-	if resp.HttpResponse() != nil && resp.HttpResponse().StatusCode >= 300 {
-		data, _ := ioutil.ReadAll(resp.HttpResponse().Body)
+	if resp != nil && resp.StatusCode >= 300 {
+		data, _ := ioutil.ReadAll(resp.Body)
 		reader.resperrbody = string(data)
 	}
 
@@ -214,7 +216,7 @@ func (t *deviceProcessStdinWriter) Close() error {
 
 type deviceProcessOutputReader struct {
 	ctx         context.Context
-	resp        *http.Response
+	resp        *hmapi.LinkResponse
 	resperr     error
 	resperrbody string
 }
