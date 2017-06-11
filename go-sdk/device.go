@@ -1,9 +1,12 @@
 package sdk
 
+import "fmt"
+
 type Device interface {
 	Filesystem() DeviceFilesystem
 	System() DeviceSystem
 	Network() DeviceNetwork
+	Process() DeviceProcess
 }
 
 type device struct {
@@ -13,7 +16,8 @@ type device struct {
 
 func (t *device) Filesystem() DeviceFilesystem {
 	return &deviceFilesystem{
-		device: t,
+		device:       t,
+		resourcePath: fmt.Sprintf("/device/%v/filesystem", t.id),
 	}
 }
 
@@ -23,4 +27,11 @@ func (t *device) System() DeviceSystem {
 
 func (t *device) Network() DeviceNetwork {
 	return nil
+}
+
+func (t *device) Process() DeviceProcess {
+	return &deviceProcess{
+		device:       t,
+		resourcePath: fmt.Sprintf("/device/%v/process", t.id),
+	}
 }
