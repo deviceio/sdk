@@ -83,7 +83,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ed25519","ed25519/internal/edwards25519"]
-  revision = "e7ba82683099cae71475961448ab8f903ea77c26"
+  revision = "fea6c2c83557701d46ea1cc0ea4c8272632fa3bd"
 
 [[projects]]
   branch = "master"
