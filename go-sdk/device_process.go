@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/deviceio/hmapi"
+	"github.com/palantir/stacktrace"
 )
 
 type DeviceProcess interface {
@@ -41,7 +42,7 @@ func (t *deviceProcess) Create(ctx context.Context, cmd string, args []string) (
 	resp, err := form.Submit(ctx)
 
 	if err != nil {
-		return nil, err
+		return nil, stacktrace.Propagate(err, "failed to submit form")
 	}
 
 	if resp.StatusCode != http.StatusCreated {
@@ -67,7 +68,7 @@ func (t *deviceProcessInstance) Start(ctx context.Context) error {
 		Submit(ctx)
 
 	if err != nil {
-		return nil
+		return stacktrace.Propagate(err, "failed form submission")
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -88,7 +89,7 @@ func (t *deviceProcessInstance) Stop(ctx context.Context) error {
 		Submit(ctx)
 
 	if err != nil {
-		return nil
+		return stacktrace.Propagate(err, "failed form submission")
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -109,7 +110,7 @@ func (t *deviceProcessInstance) Delete(ctx context.Context) error {
 		Submit(ctx)
 
 	if err != nil {
-		return nil
+		return stacktrace.Propagate(err, "failed form submission")
 	}
 
 	if resp.StatusCode != http.StatusOK {
